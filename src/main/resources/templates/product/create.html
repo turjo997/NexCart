@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.id == null ? 'Create Product' : 'Edit Product'}"></title>
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            background: #ffffff;
+            width: 440px;
+            padding: 30px 35px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin: 0 0 25px;
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #555;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid #dcdfe6;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #4a6cf7;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 11px;
+            background: #4a6cf7;
+            border: none;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #3b5bdb;
+        }
+
+        .footer-link {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .footer-link a {
+            font-size: 13px;
+            color: #4a6cf7;
+            text-decoration: none;
+        }
+
+        .footer-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h2 th:text="${product.id == null ? 'Create Product' : 'Edit Product'}"></h2>
+
+        <form th:action="@{/products/save}" th:object="${product}" method="post">
+
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" th:field="*{name}" required />
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea th:field="*{description}"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Price</label>
+                <input type="number" step="0.01" th:field="*{price}" required />
+            </div>
+
+            <div class="form-group">
+                <label>Stock Quantity</label>
+                <input type="number" th:field="*{stockQuantity}" required />
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <input type="text" th:field="*{category}" />
+            </div>
+
+            <div class="form-group checkbox-group">
+                <input type="checkbox" th:field="*{active}" />
+                <label>Active</label>
+            </div>
+
+            <button type="submit"
+                    th:text="${product.id == null ? 'Create Product' : 'Update Product'}">
+            </button>
+        </form>
+
+        <div class="footer-link">
+            <a th:href="@{/products}">← Back to product list</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

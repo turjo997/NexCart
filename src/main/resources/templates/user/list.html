@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #4a6cf7;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #3b5bdb;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f0f2f7;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            color: #555;
+            font-weight: 600;
+        }
+
+        tr:not(:last-child) td {
+            border-bottom: 1px solid #eee;
+        }
+
+        .actions a {
+            margin-right: 10px;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .edit {
+            color: #4a6cf7;
+        }
+
+        .delete {
+            color: #e74c3c;
+        }
+
+        .edit:hover,
+        .delete:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2>Users</h2>
+    <a th:href="@{/users/create}" class="btn btn-primary">+ Add User</a>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th style="width:160px;">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.email}"></td>
+            <td class="actions">
+                <a th:href="@{/users/edit/{id}(id=${user.id})}" class="edit">Edit</a>
+                <a th:href="@{/users/delete/{id}(id=${user.id})}"
+                   class="delete"
+                   onclick="return confirm('Delete this user?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
