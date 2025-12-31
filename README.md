@@ -1,4 +1,4 @@
-# NextCart
+# NexCart
 
 A lightweight **e-commerce demo application** built with Spring Boot, Thymeleaf, and PostgreSQL.  
 It provides full CRUD operations for users and products, along with a complete per-user shopping cart experience.
