@@ -11,110 +11,111 @@
             margin: 0;
             padding: 30px;
         }
-
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-
         .header h2 {
             margin: 0;
             color: #2c3e50;
         }
-
         .btn {
             padding: 8px 14px;
             border-radius: 6px;
             text-decoration: none;
             font-size: 14px;
             cursor: pointer;
+            border: none;
+            display: inline-block;
         }
-
         .btn-primary {
             background: #4a6cf7;
             color: #fff;
         }
-
         .btn-primary:hover {
             background: #3b5bdb;
         }
-
         .card {
             background: #fff;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             overflow: hidden;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
         }
-
         thead {
             background: #f0f2f7;
         }
-
         th, td {
             padding: 12px 14px;
             text-align: left;
             font-size: 14px;
         }
-
         th {
             color: #555;
             font-weight: 600;
         }
-
         tr:not(:last-child) td {
             border-bottom: 1px solid #eee;
         }
-
         .badge {
             padding: 4px 8px;
             border-radius: 12px;
             font-size: 12px;
             font-weight: 500;
         }
-
         .active {
             background: #e6f4ea;
             color: #2e7d32;
         }
-
         .inactive {
             background: #fdecea;
             color: #c62828;
         }
-
-        .actions a {
+        .actions a, .actions button {
             margin-right: 10px;
             font-size: 13px;
             text-decoration: none;
         }
+        .edit { color: #4a6cf7; }
+        .delete { color: #e74c3c; }
+        .edit:hover, .delete:hover { text-decoration: underline; }
 
-        .edit {
-            color: #4a6cf7;
-        }
-
-        .delete {
-            color: #e74c3c;
-        }
-
-        .edit:hover,
-        .delete:hover {
-            text-decoration: underline;
+        /* Mini cart */
+        .mini-cart {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            font-weight: 500;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-
+<!-- Message Display Area (Add this right after the header) -->
 <div class="header">
     <h2>Products</h2>
-    <a th:href="@{/products/create}" class="btn btn-primary">+ Add Product</a>
+    <div style="display: flex; gap: 12px; align-items: center;">
+        <a th:href="@{/users}">← Back to user list</a>
+        <a th:href="@{/products/create}" class="btn btn-primary">+ Add Product</a>
+        <div class="mini-cart">
+            Cart: <span id="cart-count">0</span> items |
+            Total: $<span id="cart-total">0.00</span>
+            <a th:href="@{/cart/view(userId=${currentUserId})}" class="btn btn-primary">View Cart</a>
+        </div>
+    </div>
 </div>
+
+<!-- Success / Error Messages -->
+<div id="message-container" style="margin: 20px 0;"></div>
 
 <div class="card">
     <table>
@@ -126,7 +127,8 @@
             <th>Stock</th>
             <th>Category</th>
             <th>Status</th>
-            <th style="width:160px;">Actions</th>
+            <th>Quantity</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -137,11 +139,19 @@
             <td th:text="${product.stockQuantity}"></td>
             <td th:text="${product.category}"></td>
             <td>
-                <span th:class="${product.active ? 'badge active' : 'badge inactive'}"
-                      th:text="${product.active ? 'Active' : 'Inactive'}">
-                </span>
+                    <span th:class="${product.active ? 'badge active' : 'badge inactive'}"
+                          th:text="${product.active ? 'Active' : 'Inactive'}"></span>
+            </td>
+            <td>
+                <input type="number" min="1" value="1"
+                       th:id="'qty-' + ${product.id}"
+                       style="width:70px; padding:6px;">
             </td>
             <td class="actions">
+                <button class="btn btn-primary"
+                        th:onclick="'addToCart(' + ${product.id} + ', \'qty-' + ${product.id} + '\')'">
+                    Add to Cart
+                </button>
                 <a th:href="@{/products/edit/{id}(id=${product.id})}" class="edit">Edit</a>
                 <a th:href="@{/products/delete/{id}(id=${product.id})}"
                    class="delete"
@@ -152,5 +162,104 @@
     </table>
 </div>
 
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    const currentUserId = /*[[${currentUserId != null ? currentUserId : 1}]]*/ 1;
+
+    function showMessage(text, type = 'success') {
+        const container = document.getElementById('message-container');
+        const isSuccess = type === 'success';
+
+        container.innerHTML = `
+            <div style="
+                padding: 14px;
+                margin-bottom: 20px;
+                border-radius: 6px;
+                font-weight: 500;
+                background: ${isSuccess ? '#d4edda' : '#f8d7da'};
+                color: ${isSuccess ? '#155724' : '#721c24'};
+                border: 1px solid ${isSuccess ? '#c3e6cb' : '#f5c6cb'};
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            ">
+                <strong>${isSuccess ? 'Success!' : 'Error:'}</strong>
+                <span>${text}</span>
+            </div>
+        `;
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            container.innerHTML = '';
+        }, 5000);
+    }
+
+    function addToCart(productId, qtyInputId) {
+        const quantityInput = document.getElementById(qtyInputId);
+        const quantity = parseInt(quantityInput.value);
+
+        if (isNaN(quantity) || quantity < 1) {
+            showMessage("Please enter a valid quantity.", "error");
+            quantityInput.focus();
+            return;
+        }
+
+        fetch(`/api/cart/${currentUserId}/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productId: productId,
+                quantity: quantity
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.error || 'Unknown error'); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                showMessage(`Added ${quantity} item(s) to cart!`, "success");
+                updateMiniCart(data);
+                // Reset quantity input to 1
+                quantityInput.value = 1;
+            })
+            .catch(err => {
+                let message = err.message || "Failed to add item to cart.";
+
+                // Make common messages more friendly
+                if (message.includes("already have")) {
+                    message += " You cannot add more than available stock.";
+                }
+
+                showMessage(message, "error");
+            });
+    }
+
+    function updateMiniCart(cartData) {
+        const itemCount = cartData.items.reduce((sum, item) => sum + item.quantity, 0);
+        const total = cartData.grandTotal ? cartData.grandTotal.toFixed(2) : "0.00";
+
+        document.getElementById('cart-count').textContent = itemCount;
+        document.getElementById('cart-total').textContent = total;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (currentUserId) {
+            fetch(`/api/cart/${currentUserId}`)
+                .then(response => response.ok ? response.json() : { items: [], grandTotal: 0 })
+                .then(data => updateMiniCart(data))
+                .catch(err => {
+                    console.error("Could not load cart:", err);
+                    updateMiniCart({ items: [], grandTotal: 0 });
+                });
+        }
+    });
+
+    /*]]>*/
+</script>
 </body>
 </html>

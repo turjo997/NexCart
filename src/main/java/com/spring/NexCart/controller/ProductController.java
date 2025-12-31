@@ -15,8 +15,11 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public String listProducts(Model model) {
+    public String listProducts(Model model, @RequestParam(required = false) Long userId) {
         model.addAttribute("products", productService.findAll());
+        Long activeUserId = (userId != null) ? userId : 1L;
+
+        model.addAttribute("currentUserId", activeUserId);
         return "product/list";
     }
 
