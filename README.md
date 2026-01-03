@@ -3,6 +3,15 @@
 A lightweight **e-commerce demo application** built with Spring Boot, Thymeleaf, and PostgreSQL.  
 It provides full CRUD operations for users and products, along with a complete per-user shopping cart experience.
 
+## Docker Setup
+
+This project includes a production-ready Docker setup using
+multi-stage builds and Docker Compose.
+
+📄 Full Docker documentation:
+[README-Docker.md](README-Docker.md)
+
+
 ## Features
 
 - **User Management**

@@ -41,3 +41,6 @@ build/
 # Docker secrets folder (contains plain-text passwords)
 secrets/
 secrets/*
+compose-test.yml
+Dockerfiletest
+Dockerfiletest2
