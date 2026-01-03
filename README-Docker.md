@@ -7,15 +7,15 @@ used during the development and deployment of the **NexCart** application.
 
 ## Table of Contents
 
-- [Chapter 1: Project Overview](#project-overview-docker-perspective)
-- [Chapter 2: How to Run (dev & prod)](#how-to-run-development-and-production)
-- [Chapter 3: Dockerfile Design](#dockerfile-design)
-- [Chapter 4: Image Build and Push](#image-build-and-push)
-- [Chapter 5: Docker Hub Link](#docker-hub-repository)
-- [Chapter 6: Image Analysis](#image-analysis-layers-and-size)
-- [Chapter 7: Docker Compose Setup](#docker-compose-setup)
-- [Chapter 8: Security and Best Practices](#security-and-best-practices)
-- [Chapter 9: Summary](#summary)
+- [Chapter 1: Project Overview](#chapter-1-project-overview)
+- [Chapter 2: How to Run (dev & prod)](#chapter-2-how-to-run-dev--prod)
+- [Chapter 3: Dockerfile Design](#chapter-3-dockerfile-design)
+- [Chapter 4: Image Build and Push](#chapter-4-image-build-and-push)
+- [Chapter 5: Docker Hub Link](#chapter-5-docker-hub-link)
+- [Chapter 6: Image Analysis (Layers and Size)](#chapter-6-image-analysis-layers-and-size)
+- [Chapter 7: Docker Compose Setup](#chapter-7-docker-compose-setup)
+- [Chapter 8: Security and Best Practices](#chapter-8-security-and-best-practices)
+- [Chapter 9: Summary](#chapter-9-summary)
 
 ---
 
