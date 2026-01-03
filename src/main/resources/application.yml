@@ -5,11 +5,16 @@ spring:
   application:
     name: NextCart
 
+  # datasource:
+  #   url: jdbc:postgresql://localhost:5432/nexCart_db
+  #   username: postgres
+  #   password: root
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/nexCart_db
-    username: postgres
-    password: root
-    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/nexCart_db}
+    username: ${DB_USERNAME:postgres}         
+    password: ${DB_PASSWORD:root}
+    driver-class-name: org.postgresql.Driver             
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
