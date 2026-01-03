@@ -106,6 +106,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>nexcart</finalName>
 	</build>
 
 </project>

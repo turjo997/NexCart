@@ -31,3 +31,13 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# Environment variables (contains DB passwords, secrets, etc.)
+.env
+.env.local
+*.env
+
+# Docker secrets folder (contains plain-text passwords)
+secrets/
+secrets/*

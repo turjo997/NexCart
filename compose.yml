@@ -1,0 +1,102 @@
+name: my-nexcart-web-app
+
+services:
+  # === Development Service ===
+  backend-dev:
+    container_name: nextcart-dev
+    build:
+      context: .
+      dockerfile: Dockerfile-multi-stage
+    image: ullash997/my-nexcart-web-app:dev
+    ports:
+      - "9095:9090"
+    command: ["/app/runner.sh"]                
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/nexCart_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - ./src:/app/src:rw                       # For faster feedback in dev
+      - ./pom.xml:/app/pom.xml:ro
+    secrets:
+      - db_password
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - nexcart-network
+    profiles:
+      - dev
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:9090/actuator/health || exit 1"]
+      #test: ["CMD", "curl", "-f", "http://localhost:9090/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # === Production Service ===
+  backend-prod:
+    container_name: nextcart-prod
+    image: ullash997/my-nexcart-web-app:latest
+    command: ["/app/runner.sh"]                 # ← Also uses runner.sh (recommended)
+    ports:
+      - "9096:9090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/nexCart_db
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - nexcart-network
+    profiles:
+      - prod
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  db:
+    container_name: postgres-db
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: nexCart_db
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - nexcart-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d nexCart_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    secrets:
+      - db_password
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+
+volumes:
+  postgres-data:
+
+networks:
+  nexcart-network:
+    driver: bridge
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
