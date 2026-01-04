@@ -6,8 +6,8 @@ services:
     container_name: nextcart-dev
     build:
       context: .
-      dockerfile: Dockerfile-multi-stage
-    image: ullash997/my-nexcart-web-app:dev
+      dockerfile: Dockerfile
+    image: ullash997/my-nexcart-web-app:${VERSION:?please set the version}
     ports:
       - "9095:9090"
     command: ["/app/runner.sh"]                

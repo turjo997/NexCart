@@ -54,7 +54,7 @@ workflows using Docker Compose profiles.
 ### Development Mode
 
 ```bash
-docker compose --profile dev up -d
+VERSION=latest docker compose --profile dev up -d
 ```
 Access Application
 
@@ -71,7 +71,7 @@ Purpose
 ### Production Mode
 
 ```bash
-docker compose --profile prod up -d
+VERSION=latest docker compose --profile prod up -d
 ``` 
 
 Access Application
@@ -119,8 +119,8 @@ and tagged according to its intended usage.
 
 ### Build Image
 ```bash
-docker compose --profile dev --build
-docker push ullash997/my-nexcart-web-app:dev
+VERSION=latest docker compose --profile dev build
+docker push ullash997/my-nexcart-web-app:latest
 ```
 
 ## Chapter 5: Docker Hub Link
@@ -144,7 +144,7 @@ The Docker image is analyzed to ensure it remains lightweight and efficient.
 
 ### Layer Analysis
 ```bash
-docker history ullash997/my-nexcart-web-app:dev
+docker history ullash997/my-nexcart-web-app:latest
 ```
 
 
