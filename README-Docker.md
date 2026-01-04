@@ -147,6 +147,31 @@ The Docker image is analyzed to ensure it remains lightweight and efficient.
 docker history ullash997/my-nexcart-web-app:dev
 ```
 
+
+| # | Instruction                                                                                      | Description | Layer Size |
+|---|--------------------------------------------------------------------------------------------------|-------------|------------|
+| 1 | ADD alpine-minirootfs-3.22.2-x86_64.tar.gz /                                                     | Alpine Linux minimal root filesystem (base image) | 3.63 MB |
+| 2 | CMD ["/bin/sh"]                                                                                  | Default shell command | 0 B |
+| 3 | ENV JAVA_HOME=/opt/java/openjdk                                                                  | Defines Java home directory | 0 B |
+| 4 | ENV PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/<br/>local/bin:/usr/sbin:/usr/bin:/sbin:/bin | Adds Java binaries to PATH | 0 B |
+| 5 | ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8                                        | Locale configuration | 0 B |
+| 6 | RUN /bin/sh -c set -eux;                                                                                     | Java installation and system setup (step 1) | 15.54 MB |
+| 7 | ENV JAVA_VERSION=jdk-21.0.9+10                                                                   | Defines Java version | 0 B |
+| 8 | RUN /bin/sh -c set -eux;                                                                                    | Java installation and cleanup (step 2) | 50.71 MB |
+| 9 | RUN /bin/sh -c set -eux;                                                                                    | Certificate or minor system config | 128 B |
+|10 | COPY --chmod=755 entrypoint.sh /__cacert_entrypoint.sh #                                                                               | Custom CA certificate entrypoint | 2.23 KB |
+|11 | ENTRYPOINT ["/__cacert_entrypoint.sh"]                                                           | Entry point for CA handling | 0 B |
+|12 | WORKDIR /app                                                                                     | Sets application working directory | 93 B |
+|13 | RUN /bin/sh -c apk add                                                                                      | Installs required Alpine packages | 575.65 KB |
+|14 | RUN /bin/sh -c addgroup -g                                                                                     | Creates non-root group | 954 B |
+|15 | COPY --chown=appuser:appgroup /app/target/*.jar app.jar #                                                                                     | Copies Spring Boot application JAR | 49.53 MB |
+|16 | COPY scripts/runner.sh /app/runner.sh # buildkit                                                                                   | Application startup script | 498 B |
+|17 | RUN /bin/sh -c chmod +x                                                                                     | Makes runner script executable | 496 B |
+|18 | USER appuser                                                                                     | Switches to non-root user | 0 B |
+|19 | EXPOSE 9090                                                                                      | Documents application port | 0 B |
+|20 | ENTRYPOINT ["java","-jar","app.jar"]                                                             | Application startup command | 0 B |
+
+
 Observations:
 
 - The final image contains only runtime layers
