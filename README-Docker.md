@@ -119,12 +119,8 @@ and tagged according to its intended usage.
 
 ### Build Image
 ```bash
-docker build -t ullash997/my-nexcart-web-app:latest -f Dockerfile-multi-stage .
-
-docker tag ullash997/my-nexcart-web-app:latest ullash997/my-nexcart-web-app:latest
-
-docker push ullash997/my-nexcart-web-app:latest
-
+docker compose --profile dev --build
+docker push ullash997/my-nexcart-web-app:dev
 ```
 
 ## Chapter 5: Docker Hub Link
@@ -148,7 +144,7 @@ The Docker image is analyzed to ensure it remains lightweight and efficient.
 
 ### Layer Analysis
 ```bash
-docker history ullash997/my-nexcart-web-app:latest
+docker history ullash997/my-nexcart-web-app:dev
 ```
 
 Observations:
@@ -160,7 +156,7 @@ Observations:
 - Each layer has a clear responsibility, improving cache reuse
 
 Image Size Review
-- docker images ullash997/my-nexcart-web-app
+- docker images ullash997/my-nexcart-web-app:dev
 
 Observations:
 
