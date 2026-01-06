@@ -83,6 +83,10 @@ echo "your_strong_password_here" > secrets/db_password.txt
 chmod 600 secrets/db_password.txt
 VERSION=latest docker compose --profile prod up -d
 ``` 
+### To keep the original data (Same both for dev & prod)
+```
+cat backup.sql | sudo VERSION=latest docker compose exec -T db psql -U postgres nexCart_db
+```
 
 Access Application
 
@@ -131,6 +135,10 @@ and tagged according to its intended usage.
 ```bash
 VERSION=latest docker compose --profile dev build
 docker push ullash997/my-nexcart-web-app:latest
+```
+### Data Persistent
+```
+docker exec postgres-db pg_dump -U postgres --clean --if-exists nexCart_db > backup.sql
 ```
 
 ## Chapter 5: Docker Hub Link
