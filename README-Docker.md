@@ -54,6 +54,11 @@ workflows using Docker Compose profiles.
 ### Development Mode
 
 ```bash
+git clone https://github.com/turjo997/NexCart.git
+cd NexCart
+mkdir -p secrets
+echo "your_strong_password_here" > secrets/db_password.txt
+chmod 600 secrets/db_password.txt
 VERSION=latest docker compose --profile dev up -d
 ```
 Access Application
@@ -71,6 +76,11 @@ Purpose
 ### Production Mode
 
 ```bash
+git clone https://github.com/turjo997/NexCart.git
+cd NexCart
+mkdir -p secrets
+echo "your_strong_password_here" > secrets/db_password.txt
+chmod 600 secrets/db_password.txt
 VERSION=latest docker compose --profile prod up -d
 ``` 
 
