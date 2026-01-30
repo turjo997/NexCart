@@ -53,4 +53,9 @@ public class UserController {
         }
         return "redirect:/users";
     }
+
+    @GetMapping("/message")
+    public String helloMessage() {
+        return "Hello World";
+    }
 }
