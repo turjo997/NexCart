@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    triggers {
-        githubPush()
-    }
-
     environment {
         VERSION = "1.0.0"
         IMAGE_NAME = "my-nexcart-web-app"
