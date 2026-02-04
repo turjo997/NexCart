@@ -14,11 +14,9 @@ pipeline {
         } 
         stage('Prepare Secrets') {
             steps {
-                sh '
-                    mkdir -p secrets
-                    echo "root" > secrets/db_password.txt
-                    chmod 600 secrets/db_password.txt
-                '
+                sh 'mkdir -p secrets'
+                sh 'echo "root" > secrets/db_password.txt'
+                sh 'chmod 600 secrets/db_password.txt'
             }
         }
         stage('Start Containers') {
