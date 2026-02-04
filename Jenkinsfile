@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    triggers {
+        githubPush()
+    }
 
     environment {
         VERSION = "1.0.0"
@@ -35,6 +38,7 @@ pipeline {
             echo 'Pipeline failed'
         }
     }
+}
     // post {
     //     always {
     //         echo 'Pipeline job finished.'
