@@ -9,7 +9,6 @@ import com.spring.NexCart.repository.CartItemRepository;
 import com.spring.NexCart.repository.CartRepository;
 import com.spring.NexCart.service.CartService;
 import com.spring.NexCart.service.ProductService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
