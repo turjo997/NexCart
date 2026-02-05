@@ -3,7 +3,8 @@
 # Stage 1: Build the application
 FROM eclipse-temurin:21-jdk-alpine AS builder
 
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash=5.2.21-r0
+#RUN apk add --no-cache bash
 
 WORKDIR /app
 
@@ -27,7 +28,10 @@ FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
-RUN apk add --no-cache wget
+# pin version here too
+RUN apk add --no-cache wget=1.21.4-r0
+
+#RUN apk add --no-cache wget
 
 RUN addgroup -g 1001 -S appgroup && \
     adduser -u 1001 -S appuser -G appgroup
