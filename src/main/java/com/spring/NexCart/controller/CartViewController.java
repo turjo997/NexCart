@@ -15,11 +15,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/cart")
-@RequiredArgsConstructor
 public class CartViewController {
 
     private final CartService cartService;
     private final UserService userService;
+
+    public CartViewController(CartService cartService, UserService userService) {
+        this.cartService = cartService;
+        this.userService = userService;
+    }
 
     @GetMapping("/view")
     public String viewCart(Model model, @RequestParam(required = false) Long userId) {

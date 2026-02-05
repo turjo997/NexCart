@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/products")
-@RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     @GetMapping
     public String listProducts(Model model, @RequestParam(required = false) Long userId) {

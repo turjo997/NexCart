@@ -13,11 +13,15 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cart")
-@RequiredArgsConstructor
 public class CartApiController {
 
     private final CartService cartService;
     private final UserService userService; // assume you have this
+
+    public CartApiController(CartService cartService, UserService userService) {
+        this.cartService = cartService;
+        this.userService = userService;
+    }
 
     @GetMapping("/{userId}")
     public CartDto getCart(@PathVariable Long userId) {
