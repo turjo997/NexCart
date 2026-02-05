@@ -15,13 +15,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
     private  final CartItemRepository cartItemRepository;
+
+    public UserServiceImpl(UserRepository userRepository, CartRepository cartRepository, CartItemRepository cartItemRepository) {
+        this.userRepository = userRepository;
+        this.cartRepository = cartRepository;
+        this.cartItemRepository = cartItemRepository;
+    }
 
     @Override
     public User save(User user) {
