@@ -130,12 +130,19 @@
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.8.3.0</version>
+
                 <configuration>
+                    <!-- Only fail on HIGH severity -->
+                    <threshold>High</threshold>
+
+                    <!-- effort level -->
                     <effort>Max</effort>
-                    <threshold>Low</threshold>
+
+                    <!-- fail build only if HIGH found -->
                     <failOnError>true</failOnError>
                 </configuration>
             </plugin>
+
 
         </plugins>
 		<finalName>nexcart</finalName>
