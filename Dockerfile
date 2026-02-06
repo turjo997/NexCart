@@ -3,8 +3,8 @@
 # Stage 1: Build the application
 FROM eclipse-temurin:21-jdk-alpine AS builder
 
-RUN apk add --no-cache bash=5.2.21-r0
-#RUN apk add --no-cache bash
+#RUN apk add --no-cache bash=5.2.21-r0
+RUN apk add --no-cache bash
 
 WORKDIR /app
 
