@@ -1,13 +1,15 @@
-name: CI - Spring Boot + SonarQube
+name: Code Tests & Quality Checks Using SonarQube
 
 on:
   workflow_dispatch:
 
   push:
-    branches: [ test ]
+    branches:
+      - 'feat/**'
 
   pull_request:
-    branches: [ test ]
+    branches:
+      - 'feat/**'
     types: [opened, synchronize, reopened]
 
 jobs:
@@ -107,7 +109,6 @@ jobs:
         run: echo "No relevant files changed. Skipping lint."
 
 
-  # ---------------- SONARQUBE (UNCHANGED) ----------------
   sonarqube:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
@@ -164,17 +165,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+
       - name: Create Pull Request
         env:
           GH_TOKEN: ${{ secrets.GIT_PAT }}
         run: |
-          if gh pr list --base main --head test --state open | grep -q "test"; then
+          CURRENT_BRANCH="${GITHUB_REF_NAME}"
+
+          echo "Current branch: $CURRENT_BRANCH"
+
+          # check if PR already exists from this branch → integration
+          if gh pr list --base integration --head "$CURRENT_BRANCH" --state open | grep -q "$CURRENT_BRANCH"; then
             echo "PR already exists, skipping creation."
           else
             gh pr create \
-              --base main \
-              --head test \
-              --title "Auto PR: Merge test into main" \
+              --base integration \
+              --head "$CURRENT_BRANCH" \
+              --title "Auto PR: Merge $CURRENT_BRANCH into integration" \
               --body "This pull request was automatically created by GitHub Actions."
             echo "PR created successfully."
           fi
