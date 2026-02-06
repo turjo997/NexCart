@@ -44,3 +44,8 @@ secrets/*
 compose-test.yml
 Dockerfiletest
 Dockerfiletest2
+
+
+.github/workflows/build.yml
+.github/workflows/build-one.yml
+.github/workflows/main.yml
