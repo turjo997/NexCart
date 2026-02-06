@@ -43,7 +43,7 @@ jobs:
       - name: Scan built Docker image
         uses: aquasecurity/trivy-action@0.24.0
         with:
-          image-ref: $DOCKERHUB_USER/$IMAGE_NAME:$VERSION
+          image-ref: ${{ env.DOCKERHUB_USER }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
           format: 'table'
           exit-code: 1
           severity: 'CRITICAL,HIGH'
