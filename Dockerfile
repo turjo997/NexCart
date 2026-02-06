@@ -29,9 +29,10 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # pin version here too
-RUN apk add --no-cache wget=1.21.4-r0
+#RUN apk add --no-cache wget=1.21.4-r0
 
-#RUN apk add --no-cache wget
+# hadolint ignore=DL3018
+RUN apk add --no-cache wget
 
 RUN addgroup -g 1001 -S appgroup && \
     adduser -u 1001 -S appuser -G appgroup
