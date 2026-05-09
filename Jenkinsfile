@@ -1,46 +1,63 @@
 pipeline {
     agent any
-    triggers {
-        githubPush()
+    options {
+        skipDefaultCheckout()
+    }
+    tools {
+        maven "mvn"
     }
 
     environment {
-        VERSION = "1.0.0"
-        IMAGE_NAME = "my-nexcart-web-app"
-        DOCKERHUB_USER = "ullash997"
+        RENDER_API_KEY = credentials('render-api-key')
+        RENDER_BACKEND_SERVICE_ID = 'srv-cv2udl2j1k6c739pp0lg'
+        RENDER_BACKEND_DEPLOY_HOOK = "https://api.render.com/deploy/${RENDER_BACKEND_SERVICE_ID}?key=HH45VpzmZPA"
     }
+
     stages {
-        stage('Stop Existing Containers') {
+        stage('Checkout') {
             steps {
-                sh 'docker compose --profile dev down'
-            }
-        } 
-        stage('Prepare Secrets') {
-            steps {
-                sh 'mkdir -p secrets'
-                sh 'echo "root" > secrets/db_password.txt'
-                sh 'chmod 600 secrets/db_password.txt'
+                git branch: 'nexCart-ci-cd',
+                credentialsId: 'github-creds',
+                url: 'https://github.com/turjo997/NexCart.git'
             }
         }
-        stage('Start Containers') {
+        stage('Build') {
+            parallel {
+                stage('Java') {
+                    steps {
+                       sh 'mvn clean install'
+                    }
+                }
+            }
+        }
+
+        stage('Test') {
             steps {
-                sh 'docker compose --profile dev up -d'
+                script {
+                    sh 'mvn test'
+                }
+            }
+        }
+
+        stage('Deploy to Render') {
+            steps {
+                httpRequest(
+                    url: "${RENDER_BACKEND_DEPLOY_HOOK}",
+                    httpMode: 'POST',
+                    validResponseCodes: '200:299'
+                )
             }
         }
     }
 
     post {
         success {
-            echo 'Deployment completed successfully'
-            sh 'docker compose ps'
+            // Actions after the build succeeds
+            echo 'Build was successful!'
         }
         failure {
-            echo 'Pipeline failed'
+            // Actions after the build fails
+            echo 'Build failed. Check logs.'
         }
     }
 }
-    // post {
-    //     always {
-    //         echo 'Pipeline job finished.'
-    //     }
-    // }
