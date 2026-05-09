@@ -9,8 +9,8 @@ pipeline {
 
     environment {
         RENDER_API_KEY = credentials('render-api-key')
-        RENDER_BACKEND_SERVICE_ID = 'srv-cv2udl2j1k6c739pp0lg'
-        RENDER_BACKEND_DEPLOY_HOOK = "https://api.render.com/deploy/${RENDER_BACKEND_SERVICE_ID}?key=HH45VpzmZPA"
+        RENDER_BACKEND_SERVICE_ID = 'srv-d7vc70ugvqtc73chn8qg'
+        RENDER_BACKEND_DEPLOY_HOOK = "https://api.render.com/deploy/${RENDER_BACKEND_SERVICE_ID}?key=GcKxW3HEoVs"
     }
 
     stages {
