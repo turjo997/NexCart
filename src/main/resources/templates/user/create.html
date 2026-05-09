@@ -95,7 +95,7 @@
 <div class="container">
     <div class="card">
 
-        <h2 th:text="${user.id == null ? 'Create User' : 'Edit User'}"></h2>
+        <h2 th:text="${user.id == null ? 'Create Entity' : 'Edit Entity'}"></h2>
 
         <form th:action="@{/users/save}" th:object="${user}" method="post">
 
