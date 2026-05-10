@@ -15,11 +15,17 @@ pipeline {
     }
 
     stages {
+//        stage('Checkout') {
+//            steps {
+//                git branch: 'nexCart-ci-cd',
+//                credentialsId: 'github-creds',
+//                url: 'https://github.com/turjo997/NexCart.git'
+//            }
+//        }
+
         stage('Checkout') {
             steps {
-                git branch: 'nexCart-ci-cd',
-                credentialsId: 'github-creds',
-                url: 'https://github.com/turjo997/NexCart.git'
+                 checkout scm
             }
         }
 
