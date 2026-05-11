@@ -5,6 +5,7 @@ pipeline {
         skipDefaultCheckout()
     }
     tools {
+        jdk "jdk21"
         maven "mvn"
     }
 
