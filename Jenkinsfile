@@ -10,7 +10,7 @@ pipeline {
     }
 
     environment {
-        JAVA_HOME = '/usr/lib/jvm/java-21-openjdk-amd64/bin'
+        JAVA_HOME = '/usr/lib/jvm/java-21-openjdk-amd64'
         PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
         RENDER_API_KEY = credentials('render-API-key')
         RENDER_BACKEND_SERVICE_ID = 'srv-d7vc70ugvqtc73chn8qg'
